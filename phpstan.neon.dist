@@ -1,0 +1,13 @@
+includes:
+    - /home/julie/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - /home/julie/vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    level: 9
+    bootstrapFiles:
+        - tests/bootstrap_phpstan.php
+    paths:
+        - autoload
+        - composer
+        - psr
+        - tests

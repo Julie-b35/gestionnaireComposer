@@ -20,10 +20,16 @@ $loaderFiles = [
     ['', '..', 'vendor', 'autoload.php'],
     ['', '..', '..', '..', 'autoload.php']
 ];
-
-if ((!$loader = includeIfExists(__DIR__ . implode(DIRECTORY_SEPARATOR, $loaderFiles[0]))) && (!$loader = includeIfExists(__DIR__ . implode(DIRECTORY_SEPARATOR, $loaderFiles[1])))) {
+$loader = null;
+foreach ($loaderFiles as $loaderFile) {
+    $loader = includeIfExists(__DIR__ . implode(DIRECTORY_SEPARATOR, $loaderFile));
+    if (!is_null($loader))
+        break;
+}
+if (is_null($loader)) {
     echo "Vous devez définir un projet avec 'composer install'" . PHP_EOL .
         "Voir https://getcomposer.org/download/ pour plus d'information sur l'installation de Composer." . PHP_EOL;
+    exit(1);
 }
 
 return $loader;

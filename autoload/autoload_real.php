@@ -3,9 +3,9 @@
 class ComposerAutoLoaderInit
 {
 
-    private static $loader;
+    private static Composer\Autoload\ClassLoader $loader;
 
-    public static function loadClassLoader($class)
+    public static function loadClassLoader(string $class): void
     {
         if ("Composer\Autoload\ClassLoader" === $class) {
             require(__DIR__ . DIRECTORY_SEPARATOR . 'ClassLoader.php');
@@ -13,9 +13,9 @@ class ComposerAutoLoaderInit
 
     }
 
-    public static function getLoader()
+    public static function getLoader(): \Composer\Autoload\ClassLoader
     {
-        if (null != self::$loader) {
+        if (isset(self::$loader)) {
             return self::$loader;
         }
 
@@ -31,7 +31,7 @@ class ComposerAutoLoaderInit
 
         $filesToLoad = \Composer\Autoload\ComposerStaticInit::$files;
         $requireFile = \Closure::bind(static function ($fileIdentifier, $file) {
-            if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
+            if (!isset($GLOBALS['__composer_autoload_files']) || !isset($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
                 $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
 
                 require($file);

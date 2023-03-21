@@ -2,20 +2,15 @@
 
 namespace Psr\Log;
 
-
 /**
- * Décrit une instance de journalisation.
+ * Il s'agit d'un simple trait Logger que les classes incapables d'étendre AbstractLogger
+ *  (parce qu'elles étendent une autre classe, etc.) peuvent inclure.
  * 
- * Le message DOIT être une chaîne ou un objet implémentant __toString().
- * Le message PEUT contenir des espaces réservés sous la forme : {foo} 
- * où foo sera remplacé par les données de contexte dans la clé "foo". 
- * 
- * Le tableau de contexte peut contenir des données arbitraires. 
- * La seule hypothèse qui peut être faite par les implémenteurs est 
- * que si une instance d'exception est donnée pour produire une trace de pile, 
- * elle DOIT être dans une clé nommée "exception".
+ * Il délègue simplement toutes les méthodes spécifiques au niveau de journalisation à la méthode `log` 
+ * pour réduire le code passe-partout qu'un simple enregistreur qui fait la même chose 
+ * avec les messages quel que soit le niveau d'erreur doit implémenter.
  */
-interface LoggerInterface
+trait LoggerTrait
 {
     /**
      * Le système est inutilisable
@@ -25,7 +20,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function emergency(string|\Stringable $message, array $context = []): void;
+    public function emergency(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::EMERGENCY, $message, $context);
+    }
+
 
     /**
      * Une action doit être effectué immédiatement.
@@ -38,7 +37,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function alert(string|\Stringable $message, array $context = []): void;
+    public function alert(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::ALERT, $message, $context);
+    }
+
 
     /**
      * Condition Critique.
@@ -50,7 +53,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function critical(string|\Stringable $message, array $context = []): void;
+    public function critical(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::CRITICAL, $message, $context);
+    }
+
 
     /**
      * Erreur d’exécution, ceci ne requière pas une action immédiate cependant elle
@@ -61,7 +68,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function error(string|\Stringable $message, array $context = []): void;
+    public function error(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::ERROR, $message, $context);
+    }
+
 
     /**
      * Occurrences exceptionnel qui ne sont pas des erreurs.
@@ -74,7 +85,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function warning(string|\Stringable $message, array $context = []): void;
+    public function warning(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::WARNING, $message, $context);
+    }
+
 
     /**
      * Évènements normaux mais significatif.
@@ -84,7 +99,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function notice(string|\Stringable $message, array $context = []): void;
+    public function notice(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::NOTICE, $message, $context);
+    }
+
 
     /**
      * Évènements intéressent.
@@ -96,7 +115,11 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function info(string|\Stringable $message, array $context = []): void;
+    public function info(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::INFO, $message, $context);
+    }
+
 
     /**
      * Information débogage détaillé.
@@ -106,7 +129,10 @@ interface LoggerInterface
      * 
      * @return void
      */
-    public function debug(string|\Stringable $message, array $context = []): void;
+    public function debug(string|\Stringable $message, array $context = []): void
+    {
+        $this->log(LogLevel::DEBUG, $message, $context);
+    }
 
     /**
      * Log avec un niveau arbitraire.
@@ -119,5 +145,5 @@ interface LoggerInterface
      * 
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public function log($level, string|\Stringable $message, array $context = []): void;
+    abstract public function log($level, string|\Stringable $message, array $context = []): void;
 }
